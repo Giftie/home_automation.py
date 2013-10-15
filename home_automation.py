@@ -2,7 +2,7 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import sys, urllib2, os
+import sys, urllib2, os, subprocess
 from threading import Thread
 from urllib import urlencode
 
@@ -14,6 +14,13 @@ BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 import utils
 
+try:
+    # testing for boblight.
+    boblight_addon       = xbmcaddon.Addon( "script.xbmc.boblight" )
+    boblight = True
+except:
+    boblight = False
+    
 class Automate:
     def __init__( self ):
         pass
@@ -50,6 +57,7 @@ class Automate:
                 will trigger code that is set under the Movie heading.
                 
         """
+        """ using subprocess to initiate CLI commands """
         if not trigger:
             utils.log( " - [ home_automation.py ] - No Trigger Sent, Returning", xbmc.LOGNOTICE )
             return
@@ -59,7 +67,10 @@ class Automate:
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
             # place code below this line
-            pass
+            subprocess.call( "irsend -d /var/run/lirc/lircd-lirc0 SEND_START Lutron_MaestroIR Raise; sleep 7; irsend -d /var/run/lirc/lircd-lirc0 SEND_STOP Lutron_MaestroIR Raise", shell=True )
+            if boblight:
+                if boblight_addon.getSetting( "bobdisable" ) == "false":
+                    boblight_addon.setSetting( "boblight", "true" )
         # Trivia Intro
         elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]: 
             # place code below this line
@@ -79,7 +90,7 @@ class Automate:
         # Coming Attractions Intro
         elif trigger == "Coming Attractions Intro" and ha_settings[ "ha_cav_intro" ]:
             # place code below this line
-            pass
+            subprocess.call( "irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE Lutron_MasstroIR Scene", shell=True )
         # Trailer
         elif trigger == "Movie Trailer" and ha_settings[ "ha_trailer_start" ]:
             # place code below this line
@@ -107,11 +118,16 @@ class Automate:
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
             # place code below this line
-            pass
+            if boblight:
+                if boblight_addon.getSetting( "bobdisable" ) == "true":
+                    boblight_addon.setSetting( "boblight", "false" )
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
             # place code below this line
-            pass
+            subprocess.call( "irsend -d /var/run/lirc/lircd-lirc0 SEND_START Lutron_MaestroIR Raise; sleep 7; irsend -d /var/run/lirc/lircd-lirc0 SEND_STOP Lutron_MaestroIR Raise", shell=True )
+            if boblight:
+                if boblight_addon.getSetting( "bobdisable" ) == "false":
+                    boblight_addon.setSetting( "boblight", "true" )
         # Movie Theatre Intro
         elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]: 
             # place code below this line
@@ -119,18 +135,22 @@ class Automate:
         # Intermission
         elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]: 
             # place code below this line
-            pass
+            if boblight:
+                if boblight_addon.getSetting( "bobdisable" ) == "false":
+                    boblight_addon.setSetting( "boblight", "true" )
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
             # place code below this line
-            pass
+            if boblight:
+                if boblight_addon.getSetting( "bobdisable" ) == "true":
+                    boblight_addon.setSetting( "boblight", "false" )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
             # place code below this line
-            pass
+            subprocess.call( "irsend -d /var/run/lirc/lircd-lirc0 SEND_START Lutron_MaestroIR Raise; sleep 7; irsend -d /var/run/lirc/lircd-lirc0 SEND_STOP Lutron_MaestroIR Raise", shell=True )
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
             # place code below this line
-            pass
+            subprocess.call( "irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE Lutron_MasstroIR Scene", shell=True )
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
