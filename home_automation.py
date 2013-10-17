@@ -19,9 +19,6 @@ class Automate:
         pass
     
     def sab_pause(self, mode):
-        apikey = ""
-        ip = "127.0.0.1" # address 
-        port = "5000"
         url = "http://%s:%s/sabnzbd/" % ( ip, port )
         query = {}
         query[ "mode" ] = mode
@@ -58,79 +55,62 @@ class Automate:
             utils.log( " - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
-            # place code below this line
-            pass
+            self.sab_pause( "pause" )
         # Trivia Intro
         elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]: 
             # place code below this line
             pass
         # Trivia
         elif trigger == "Trivia" and ha_settings[ "ha_trivia_start" ]: 
-            # place code below this line
             pass
         # Trivia Outro
         elif trigger == "Trivia Outro" and ha_settings[ "ha_trivia_outro" ]:
-            # place code below this line
             pass
         # Movie Theatre Intro
         elif trigger == "Movie Theater Intro" and ha_settings[ "ha_mte_intro" ]:
-            # place code below this line
             pass
         # Coming Attractions Intro
         elif trigger == "Coming Attractions Intro" and ha_settings[ "ha_cav_intro" ]:
-            # place code below this line
             pass
         # Trailer
         elif trigger == "Movie Trailer" and ha_settings[ "ha_trailer_start" ]:
-            # place code below this line
             pass
         # Coming Attractions Outro
         elif trigger == "Coming Attractions Outro" and ha_settings[ "ha_cav_outro" ]: 
-            # place code below this line
             pass
         # Feature Presentation Intro
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
-            # place code below this line
             pass
         # MPAA Rating
         elif trigger == "MPAA Rating" and ha_settings[ "ha_mpaa_rating" ]: 
-            # place code below this line
             pass
         # Countdown
         elif trigger == "Countdown" and ha_settings[ "ha_countdown_video" ]:
-            # place code below this line
             pass
         # Audio Format
         elif trigger == "Audio Format" and ha_settings[ "ha_audio_format" ]:
-            # place code below this line
             pass
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
-            # place code below this line
             pass
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
-            # place code below this line
             pass
         # Movie Theatre Intro
         elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]: 
-            # place code below this line
             pass
         # Intermission
         elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]: 
-            # place code below this line
             pass
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
-            # place code below this line
-            pass
+            self.sab_pause( "resume" )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
-            # place code below this line
             pass
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
-            # place code below this line
             pass
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
+        
