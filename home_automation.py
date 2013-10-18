@@ -29,7 +29,7 @@ class Automate:
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
       
-    def activate_ha( self, trigger = None, prev_trigger = None, mode="thread" ):
+    def activate_ha( self, trigger = None, prev_trigger = None, mode="normal" ):
         if ha_settings[ "ha_enable" ]:
             if ha_settings[ "ha_multi_trigger" ] and prev_trigger == trigger:
                 pass
@@ -38,6 +38,7 @@ class Automate:
             else:
                 thread = Thread( name='ha_trigger', target=self.activate_on, args=( trigger, ) )
                 thread.start()
+            prev_trigger = trigger
         return prev_trigger
 
     def activate_on( self, trigger = None ):
