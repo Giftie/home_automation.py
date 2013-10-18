@@ -28,7 +28,7 @@ class Automate:
         query["apikey"] = apikey
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
-      
+           
     def activate_ha( self, trigger = None, prev_trigger = None, mode="normal" ):
         if ha_settings[ "ha_enable" ]:
             if ha_settings[ "ha_multi_trigger" ] and prev_trigger == trigger:
@@ -58,79 +58,61 @@ class Automate:
             utils.log( " - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>script_start</b>" )
         # Trivia Intro
-        elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]: 
-            # place code below this line
-            pass
+        elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]:
+            utils.broadcastUDP( "<b>CE_Automate<li>trivia_intro</b>" )
         # Trivia
         elif trigger == "Trivia" and ha_settings[ "ha_trivia_start" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>triva_start</b>" )
         # Trivia Outro
         elif trigger == "Trivia Outro" and ha_settings[ "ha_trivia_outro" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>trivia_outro</b>" )
         # Movie Theatre Intro
         elif trigger == "Movie Theater Intro" and ha_settings[ "ha_mte_intro" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>movie_theatre_intro</b>" )
         # Coming Attractions Intro
         elif trigger == "Coming Attractions Intro" and ha_settings[ "ha_cav_intro" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>coming_attractions_intro</b>" )
         # Trailer
         elif trigger == "Movie Trailer" and ha_settings[ "ha_trailer_start" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>trailer</b>" )
         # Coming Attractions Outro
         elif trigger == "Coming Attractions Outro" and ha_settings[ "ha_cav_outro" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>coming_attractions_outro</b>" )
         # Feature Presentation Intro
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>feature_intro</b>" )
         # MPAA Rating
         elif trigger == "MPAA Rating" and ha_settings[ "ha_mpaa_rating" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>mpaa_rating</b>" )
         # Countdown
         elif trigger == "Countdown" and ha_settings[ "ha_countdown_video" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>countdown_video</b>" )
         # Audio Format
         elif trigger == "Audio Format" and ha_settings[ "ha_audio_format" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>audio_video</b>" )
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>movie_start</b>" )
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>feature_outro</b>" )
         # Movie Theatre Intro
         elif trigger == "Movie Theatre Outro" and ha_settings[ "ha_mte_outro" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>movie_theatre_outro</b>" )
         # Intermission
         elif trigger == "Intermission" and ha_settings[ "ha_intermission" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>intermission</b>" )
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>script_end</b>" )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>paused</b>" )
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
-            # place code below this line
-            pass
+            utils.broadcastUDP( "<b>CE_Automate<li>resumed</b>" )
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
+        
