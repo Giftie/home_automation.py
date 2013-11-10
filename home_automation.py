@@ -93,7 +93,7 @@ class Automate:
             # place code below this line
             pass
         #3D Trailers
-        elif trigger == "3D Trailer" and ha_setting [ "ha_3d_trailer" ]:
+        elif trigger == "3D Movie Trailer" and ha_setting [ "ha_3d_trailer" ]:
             # place code below this line
             pass
         # MPAA Rating
