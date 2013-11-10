@@ -92,6 +92,10 @@ class Automate:
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
             # place code below this line
             pass
+        #3D Trailers
+        elif trigger == "3D Trailer" and ha_setting [ "ha_3d_trailer" ]:
+            # place code below this line
+            pass
         # MPAA Rating
         elif trigger == "MPAA Rating" and ha_settings[ "ha_mpaa_rating" ]: 
             # place code below this line
