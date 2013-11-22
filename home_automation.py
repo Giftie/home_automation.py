@@ -2,9 +2,11 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import sys, urllib2, os, base64
+import sys, urllib2, os, requests
 from threading import Thread
 from urllib import urlencode
+from requests.auth import HTTPBasicAuth
+
 
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
@@ -17,25 +19,18 @@ import utils
 lights_pause = "02610511FF"
 lights_movie = "02610611FF"
 lights_start = "02610411FF"
-lights_end = "02610311FF"
+lights_end   = "02610311FF"
 
 class Automate:
     def __init__( self ):
         pass
 
     def insteon_direct( self, ip = "0.0.0.0", port = "25105", username = "", password = "", command = "" ):
-        url = "http://%s:%s/3?%s=I=3" % ( ip, port, command )
+        auth=HTTPBasicAuth( username, password )
+        url = u'http://%s:%s/3?%s=I=3' % ( ip, port, command )
         utils.log( url )
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password( None, url, username, password )
-        handler = urllib2.HTTPBasicAuthHandler( password_mgr )
-        opener = urllib2.build_opener( handler )
-        opener.open( url )
-        urllib2.install_opener( opener )
-        request = urllib2.Request( url )
-        result = urllib2.urlopen( request )
-        utils.log( result )
-        
+        r = requests.post(url=url, auth=auth)
+    
     def sab_pause(self, mode):
         apikey = ""
         ip = "127.0.0.1" # address 
