@@ -5,7 +5,11 @@ import xbmc, xbmcaddon
 import sys, urllib2, os
 from threading import Thread
 from urllib import urlencode
-
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
+    
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
 triggers                 = sys.modules[ "__main__" ].triggers
@@ -17,6 +21,18 @@ import utils
 class Automate:
     def __init__( self ):
         pass
+    def retrieve_aspect_ratio( self ):
+        utils.log( "Retrieving Movie Aspect Ratio", xbmc.LOGNOTICE )
+        json_query = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": %d, "properties": [ "streamdetails" ]}, "id": 1}' % movie_id
+        jsonresponse = xbmc.executeJSONRPC( jsonquery )
+        data = simplejson.loads( jsonresponse )
+        if data.has_key('result'):
+            if data['result'].has_key('moviedetails'):
+                movie_detail = data['result']['moviedetails']
+                try:
+                    aspect_ratio = movie_detail['streamdetails']['video'][0]['aspect']
+                except:
+                    aspect_ratio = 1.78
     
     def sab_pause(self, mode):
         apikey = ""
