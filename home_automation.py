@@ -2,9 +2,11 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import sys, urllib2, os, base64
+import sys, urllib2, os, requests
 from threading import Thread
 from urllib import urlencode
+from requests.auth import HTTPBasicAuth
+
 
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
@@ -17,25 +19,18 @@ import utils
 lights_pause = "02610511FF"
 lights_movie = "02610611FF"
 lights_start = "02610411FF"
-lights_end = "02610311FF"
+lights_end   = "02610311FF"
 
 class Automate:
     def __init__( self ):
         pass
 
     def insteon_direct( self, ip = "0.0.0.0", port = "25105", username = "", password = "", command = "" ):
-        url = "http://%s:%s/3?%s=I=3" % ( ip, port, command )
+        auth=HTTPBasicAuth( username, password )
+        url = u'http://%s:%s/3?%s=I=3' % ( ip, port, command )
         utils.log( url )
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password( None, url, username, password )
-        handler = urllib2.HTTPBasicAuthHandler( password_mgr )
-        opener = urllib2.build_opener( handler )
-        opener.open( url )
-        urllib2.install_opener( opener )
-        request = urllib2.Request( url )
-        result = urllib2.urlopen( request )
-        utils.log( result )
-        
+        r = requests.post(url=url, auth=auth)
+    
     def sab_pause(self, mode):
         apikey = ""
         ip = "127.0.0.1" # address 
@@ -77,7 +72,7 @@ class Automate:
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
             # place code below this line
-            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_start )
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "password", command = lights_start )
         # Trivia Intro
         elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]: 
             # place code below this line
@@ -125,7 +120,7 @@ class Automate:
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
             # place code below this line
-            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_movie )
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "password", command = lights_movie )
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
             # place code below this line
@@ -141,14 +136,14 @@ class Automate:
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
             # place code below this line
-            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_end )
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "password", command = lights_end )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
             # place code below this line
-            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_pause )
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "password", command = lights_pause )
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
             # place code below this line
-            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_movie )
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "password", command = lights_movie )
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
