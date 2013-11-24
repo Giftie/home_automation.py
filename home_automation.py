@@ -46,6 +46,7 @@ class Automate:
                             utils.log( movie_detail, xbmc.LOGDEBUG )
             else:
                 pass
+        # convert the supplied aspect ratio to a value with two decimal places
         movie_aspect = decimal.Decimal(aspect_ratio).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
         return movie_aspect
     
@@ -138,7 +139,16 @@ class Automate:
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
             aspect_ratio = self.retrieve_aspect_ratio
-            
+            if aspect_ratio == decimal.Decimal( 1.33 ):
+                # really 4x3 hmmm....
+            elif aspect_ratio == decimal.Decimal( 1.77 ):
+                # now we're talking, 16x9
+            elif aspect_ratio == decimal.Decimal( 2.35 ):
+                # anamorphic
+            elif aspect_ratio == decimal.Decimal( 2.40 ):
+                # still anamorphic
+            else:
+                # nothing matched yet.
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
             # place code below this line
