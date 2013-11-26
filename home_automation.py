@@ -2,15 +2,18 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import sys, urllib2, os
+import sys, urllib2, os, requests
 import decimal
 from threading import Thread
 from urllib import urlencode
+from requests.auth import HTTPBasicAuth
+
 if sys.version_info < (2, 7):
     import simplejson
 else:
     import json as simplejson
     
+
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
 triggers                 = sys.modules[ "__main__" ].triggers
@@ -18,6 +21,11 @@ ha_settings              = sys.modules[ "__main__" ].ha_settings
 BASE_RESOURCE_PATH       = sys.modules["__main__"].BASE_RESOURCE_PATH
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 import utils
+
+lights_pause = "02610511FF"
+lights_movie = "02610611FF"
+lights_start = "02610411FF"
+lights_end   = "02610311FF"
 
 class Automate:
     def __init__( self ):
@@ -49,6 +57,12 @@ class Automate:
         # convert the supplied aspect ratio to a value with two decimal places
         movie_aspect = decimal.Decimal(aspect_ratio).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
         return movie_aspect
+
+    def insteon_direct( self, ip = "0.0.0.0", port = "25105", username = "", password = "", command = "" ):
+        auth=HTTPBasicAuth( username, password )
+        url = u'http://%s:%s/3?%s=I=3' % ( ip, port, command )
+        utils.log( url )
+        r = requests.post(url=url, auth=auth)
     
     def sab_pause(self, mode):
         apikey = ""
@@ -90,6 +104,8 @@ class Automate:
             utils.log( " - [ home_automation.py ] - Trigger %s" % trigger, xbmc.LOGNOTICE )
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
+            # place code below this line
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_start )
             utils.broadcastUDP( "<b>CE_Automate<li>script_start</b>" )
         # Trivia Intro
         elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]:
@@ -126,6 +142,8 @@ class Automate:
             utils.broadcastUDP( "<b>CE_Automate<li>audio_video</b>" )
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
+            # place code below this line
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_movie )
             utils.broadcastUDP( "<b>CE_Automate<li>movie_start</b>" )
             aspect_ratio = self.retrieve_aspect_ratio
             if aspect_ratio == decimal.Decimal( 1.33 ):
@@ -149,12 +167,18 @@ class Automate:
             utils.broadcastUDP( "<b>CE_Automate<li>intermission</b>" )
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
+            # place code below this line
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_end )
             utils.broadcastUDP( "<b>CE_Automate<li>script_end</b>" )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
+            # place code below this line
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_pause )
             utils.broadcastUDP( "<b>CE_Automate<li>paused</b>" )
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
+            # place code below this line
+            self.insteon_direct( ip = "192.168.2.9", port = "25105", username = "admin", password = "gmracing", command = lights_movie )
             utils.broadcastUDP( "<b>CE_Automate<li>resumed</b>" )
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
