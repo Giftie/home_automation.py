@@ -3,9 +3,14 @@
 
 import xbmc, xbmcaddon
 import sys, urllib2, os
+import decimal
 from threading import Thread
 from urllib import urlencode
-
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
+    
 __script__               = sys.modules[ "__main__" ].__script__
 __scriptID__             = sys.modules[ "__main__" ].__scriptID__
 triggers                 = sys.modules[ "__main__" ].triggers
@@ -17,6 +22,33 @@ import utils
 class Automate:
     def __init__( self ):
         pass
+        
+    def retrieve_aspect_ratio( self ):
+        # returns 
+        utils.log( "Retrieving Movie Aspect Ratio", xbmc.LOGNOTICE )
+        aspect_ratio = 1.78
+        playerid_query = '{"jsonrpc": "2.0", "method": "Player.GetActivePlayers", "id": 1}'
+        jsonresponse = xbmc.executeJSONRPC( playerid_query )
+        data = simplejson.loads( jsonresponse )
+        if data.has_key('result'):
+            if data['result'].has_key('playerid'):
+                playerid = int( data['result']['playerid'] )
+                json_query = '{"jsonrpc": "2.0", "method": "Player.GetItem", "params": { "playerid": %d, "properties": [ "streamdetails" ]}, "id": 1}' % playerid
+                jsonresponse = xbmc.executeJSONRPC( json_query )
+                data = simplejson.loads( jsonresponse )
+                if data.has_key('result'):
+                    if data['result'].has_key('item'):
+                        movie_detail = data['result']['item']
+                        try:
+                            aspect_ratio = float( movie_detail['streamdetails']['video'][0]['aspect'] )
+                        except:
+                            utils.log( "Error getting streamdetails:", xbmc.LOGDEBUG )
+                            utils.log( movie_detail, xbmc.LOGDEBUG )
+            else:
+                pass
+        # convert the supplied aspect ratio to a value with two decimal places
+        movie_aspect = decimal.Decimal(aspect_ratio).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
+        return movie_aspect
     
     def sab_pause(self, mode):
         apikey = ""
@@ -25,7 +57,7 @@ class Automate:
         url = "http://%s:%s/sabnzbd/" % ( ip, port )
         query = {}
         query[ "mode" ] = mode
-        query["apikey"] = apikey
+        query[ "apikey" ] = apikey
         response = urllib2.urlopen( urllib2.Request( url + "api?", urlencode( query ) ) )
         response_data = response.read()
            
@@ -95,6 +127,17 @@ class Automate:
         # Movie
         elif trigger == "Movie" and ha_settings[ "ha_movie" ]: 
             utils.broadcastUDP( "<b>CE_Automate<li>movie_start</b>" )
+            aspect_ratio = self.retrieve_aspect_ratio
+            if aspect_ratio == decimal.Decimal( 1.33 ):
+                # really 4x3 hmmm....
+            elif aspect_ratio == decimal.Decimal( 1.77 ):
+                # now we're talking, 16x9
+            elif aspect_ratio == decimal.Decimal( 2.35 ):
+                # anamorphic
+            elif aspect_ratio == decimal.Decimal( 2.40 ):
+                # still anamorphic
+            else:
+                # nothing matched yet.
         # Feature Presentation Outro
         elif trigger == "Feature Presentation Outro" and ha_settings[ "ha_fpv_outro" ]:
             utils.broadcastUDP( "<b>CE_Automate<li>feature_outro</b>" )
