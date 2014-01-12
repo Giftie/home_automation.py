@@ -1,6 +1,7 @@
 # This module's future home should be inside userdata/addon_data/script.cinema.experience/ha_scripts
 # to make sure it does not get over written when updating the script
 
+
 import xbmc, xbmcaddon
 import sys, urllib2, os, httplib
 from threading import Thread
@@ -22,8 +23,49 @@ class Automate:
         self.command_groups = '/api/%s/groups/%s/action'
         self.command_light = '/api/%s/lights/%s/state'
     
-    def philips_hue( self, group = 0, light = 0, content = "" ):
-        if light > 0:
+    def philips_hue( self, group = -1, light = -1, content = "" ):
+        """ This function provides simple control of single groups and single lights.
+            
+            The following websites might prove to be useful:
+            
+            http://developers.meethue.com/1_lightsapi.html
+            http://developers.meethue.com/2_groupsapi.html
+            http://rsmck.co.uk/hue
+            
+            Ussage:
+                To call the philips_hue function, you need to provide the group or
+                light number as well as the function you would like to use.
+                
+                Groups:
+                
+                    The function call to create an action for a group is the following:
+                    
+                        self.philips_hue( group = group_number, content = body_content )
+                            # where group_number is the actual group number and body_content the action.
+                            
+                    You can actually use the above line exactly how it is with declaring the variables be for it.
+                    
+                        group_number = 7
+                        body_content = '''{"on":true}'''
+                        self.philips_hue( group = group_number, content = body_content )
+                        
+                        This would turn on group 7.
+                
+                Lights:
+                    The function call to set a light is almost the same as the group function:
+                    
+                        self.philips_hue( light = light_number, content = body_content )
+                            # where light_number is the actual light number and body_content the action.
+                            
+                    You can actually use the above line exactly how it is with declaring the variables be for it.
+                    
+                        light_number = 1
+                        body_content = '''{"bri": 254, "on": true}'''
+                        self.philips_hue( light = light_number, content = body_content )
+                        
+                        This would turn on light 1 at full brightness.
+        """
+        if light > -1: # Not sure if there is a light number 0, but this will take care of it.
             command = self.command_light % ( self.hue_api_key, light )
         else:
             command = self.command_group % ( self.hue_api_key, group )
