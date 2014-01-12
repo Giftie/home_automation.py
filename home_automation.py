@@ -16,6 +16,7 @@ import utils
 
 class Automate:
     def __init__( self ):
+        #  Put the Philips Hub address and api key here.
         self.hue_address = '0.0.0.0'
         self.hue_api_key = ''
         self.command_groups = '/api/%s/groups/%s/action'
