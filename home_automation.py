@@ -22,7 +22,7 @@ class Automate:
         self.command_groups = '/api/%s/groups/%s/action'
         self.command_light = '/api/%s/lights/%s/state'
     
-    def philips_hue( self, group = 0, content = "" ):
+    def philips_hue( self, group = 0, light = 0, content = "" ):
         if light > 0:
             command = self.command_light % ( self.hue_api_key, light )
         else:
