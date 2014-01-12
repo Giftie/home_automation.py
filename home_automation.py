@@ -2,7 +2,7 @@
 # to make sure it does not get over written when updating the script
 
 import xbmc, xbmcaddon
-import sys, urllib2, os
+import sys, urllib2, os, httplib
 from threading import Thread
 from urllib import urlencode
 
@@ -16,8 +16,19 @@ import utils
 
 class Automate:
     def __init__( self ):
-        pass
+        self.hue_address = '0.0.0.0'
+        self.hue_api_key = ''
+        self.command_groups = '/api/%s/groups/%s/action'
+        self.command_light = '/api/%s/lights/%s/state'
     
+    def philips_hue( self, group = 0, content = "" ):
+        if light > 0:
+            command = self.command_light % ( self.hue_api_key, light )
+        else:
+            command = self.command_group % ( self.hue_api_key, group )
+        connection = httplib.HTTPConnection( self.hub_address )
+        connection.request( 'PUT', command, content )
+        
     def sab_pause(self, mode):
         apikey = ""
         ip = "127.0.0.1" # address 
@@ -59,7 +70,8 @@ class Automate:
         # Script Start
         if trigger == "Script Start" and ha_settings[ "ha_script_start" ]: 
             # place code below this line
-            pass
+            body_content = '{"on":true}'
+            self.philips_hue( group = 7, content = body_content )
         # Trivia Intro
         elif trigger == "Trivia Intro" and ha_settings[ "ha_trivia_intro" ]: 
             # place code below this line
@@ -79,7 +91,8 @@ class Automate:
         # Coming Attractions Intro
         elif trigger == "Coming Attractions Intro" and ha_settings[ "ha_cav_intro" ]:
             # place code below this line
-            pass
+            body_content = '{"on":false}'
+            self.philips_hue( group = 7, content = body_content )
         # Trailer
         elif trigger == "Movie Trailer" and ha_settings[ "ha_trailer_start" ]:
             # place code below this line
@@ -135,14 +148,17 @@ class Automate:
         # Script End
         elif trigger == "Script End" and ha_settings[ "ha_script_end" ]: 
             # place code below this line
-            pass
+            body_content = '{"on":true}'
+            self.philips_hue( group = 7, content = body_content )
         # Paused
         elif trigger == "Pause" and ha_settings[ "ha_paused" ]: 
             # place code below this line
-            pass
+            body_content = '{"on":true}'
+            self.philips_hue( group = 7, content = body_content )
         # Resumed
         elif trigger == "Resume" and ha_settings[ "ha_resumed" ]: 
             # place code below this line
-            pass
+            body_content = '{"on":false}'
+            self.philips_hue( group = 7, content = body_content )
         else:
             utils.log( " - [ home_automation.py ] - Opps. Something happened", xbmc.LOGNOTICE )
