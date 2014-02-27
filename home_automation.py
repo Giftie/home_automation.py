@@ -20,7 +20,7 @@ class Automate:
         #  Put the Philips Hub address and api key here.
         self.hue_address = '0.0.0.0'
         self.hue_api_key = ''
-        self.command_groups = '/api/%s/groups/%s/action'
+        self.command_group = '/api/%s/groups/%s/action'
         self.command_light = '/api/%s/lights/%s/state'
     
     def philips_hue( self, group = -1, light = -1, content = "" ):
@@ -69,7 +69,7 @@ class Automate:
             command = self.command_light % ( self.hue_api_key, light )
         else:
             command = self.command_group % ( self.hue_api_key, group )
-        connection = httplib.HTTPConnection( self.hub_address )
+        connection = httplib.HTTPConnection( self.hue_address )
         connection.request( 'PUT', command, content )
         
     def sab_pause(self, mode):
