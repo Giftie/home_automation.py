@@ -19,6 +19,23 @@ class Automate:
         pass
     
     def sab_pause(self, mode):
+        """
+            This function provides a method to pause and resume SabNZBd downloading, very useful on a limited network or low powered system
+            
+            Usage:
+            
+                apikey - Your SabNZBd API key goes here
+                ip     - The IP of your SabNZBd Machine, if local, leave as is, if it does not work, put the actual address in
+                port   - Normally 5000 but change it to match you SabNZBd program
+                
+                Pause:
+                
+                    self.sab_pause( "pause" )
+                
+                Resume:
+                
+                    self.sab_pause( "resume" )
+        """
         apikey = ""
         ip = "127.0.0.1" # address 
         port = "5000"
@@ -83,6 +100,15 @@ class Automate:
         # Feature Presentation Intro
         elif trigger == "Feature Presentation Intro" and ha_settings[ "ha_fpv_intro" ]: 
             utils.broadcastUDP( "<b>CE_Automate<li>feature_intro</b>" )
+        #3D Intro
+        elif trigger == "3D Intro" and ha_settings[ "ha_3d_intro" ]:
+            utils.broadcastUDP( "<b>CE_Automate<li>3d_intro</b>" )
+        #3D Trailers
+        elif trigger == "3D Movie Trailer" and ha_settings[ "ha_3d_trailer" ]:
+            utils.broadcastUDP( "<b>CE_Automate<li>3d_trailer</b>" )
+        #3D Outro
+        elif trigger == "3D Outro" and ha_settings[ "ha_3d_outro" ]:
+            utils.broadcastUDP( "<b>CE_Automate<li>3d_outro</b>" )
         # MPAA Rating
         elif trigger == "MPAA Rating" and ha_settings[ "ha_mpaa_rating" ]: 
             utils.broadcastUDP( "<b>CE_Automate<li>mpaa_rating</b>" )
