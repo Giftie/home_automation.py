@@ -166,15 +166,15 @@ class Automate:
             # place code below this line
             pass
         #3D Intro
-        elif trigger == "3D Intro" and ha_setting [ "ha_3d_intro" ]:
+        elif trigger == "3D Intro" and ha_settings[ "ha_3d_intro" ]:
             # place code below this line
             pass
         #3D Trailers
-        elif trigger == "3D Movie Trailer" and ha_setting [ "ha_3d_trailer" ]:
+        elif trigger == "3D Movie Trailer" and ha_settings[ "ha_3d_trailer" ]:
             # place code below this line
             pass
         #3D Outro
-        elif trigger == "3D Outro" and ha_setting [ "ha_3d_outro" ]:
+        elif trigger == "3D Outro" and ha_settings[ "ha_3d_outro" ]:
             # place code below this line
             pass
         # MPAA Rating
